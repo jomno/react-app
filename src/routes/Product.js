@@ -1,5 +1,28 @@
 import { useEffect, useState } from "react";
 
+function ProductCardList({ products }) {
+  return (
+    <ul className="product-list">
+      {products.map(product => (
+        <li className="item" key={product.id}>
+          <div className="flex-wrap">
+            <span className="item-rating">평점: {product.rating.rate}</span>
+            <figure className="item-image">
+              <img src={product.image} alt={product.title} />
+            </figure>
+          </div>
+          <h3 className="item-title">{product.title}</h3>
+          <div className="item-description">{product.description}</div>
+          <div className="item-price">가격: ₩{(product.price * 1200).toLocaleString()}</div>
+          <div className="item-delete">
+            <button className="delete-button">삭제</button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 function Product() {
   const [productData, setProductData] = useState([]);
   useEffect(() => {
@@ -7,11 +30,11 @@ function Product() {
       .then(response => response.json())
       .then(data => setProductData(data))
   }, [])
-  // console.log(productData);
 
   return (
     <div>
       <h1>상품 목록</h1>
+      <ProductCardList products={productData} />
     </div>
   )
 }
