@@ -23,6 +23,7 @@ function ProductList({ product, deletebtn }) {
 
 function ProductContainer({ products }) {
 
+  const [filterProducts, setFilterProducts] = useState(products);
   const [searchFilter, setSearchFilter] = useState(''); // 검색 필터 기본 false
   const [sortList, setSortList] = useState('default');
 
@@ -32,32 +33,28 @@ function ProductContainer({ products }) {
     btnParent.parentElement.remove();
   }
 
-  let filterList = products; // 기본 리스트
+  useEffect(() => {
+    let filterList = products; // 기본 리스트
 
-  if (searchFilter) { // input에 검색을 하면 
-    // 이름(title)으로 검색 기능 소문자로 변환, 공백 제거 비교
-    filterList = products.filter(product => product.title.replace(/\s/g, '').toLowerCase().includes(searchFilter.replace(/\s/g, '').toLowerCase()));
-  }
+    if (searchFilter) { // input에 검색을 하면 
+      // 이름(title)으로 검색 기능 소문자로 변환, 공백 제거 비교
+      filterList = products.filter(product => product.title.replace(/\s/g, '').toLowerCase().includes(searchFilter.replace(/\s/g, '').toLowerCase()));
+    }
 
-  // 기본 정렬 누르면 filterList=products 디폴트값
-  // 가격 정렬 누르면 filterList = 가격정렬된리스트 a-b 오름차순
-  // 평점 정렬 누르면 filterList = 평점정렬된리스트 a-b 오름차순
+    switch (sortList) {
+      case 'price':
+        filterList = filterList.slice().sort((a, b) => (a.price - b.price))
+        break;
+      case 'rating':
+        filterList = filterList.slice().sort((a, b) => (a.rating.rate - b.rating.rate))
+        break;
+      default:
+        break;
+    }
 
-  switch (sortList) {
-    case 'price':
-      filterList = products.filter((product) => product.price).sort((a, b) => (a.price - b.price))
-      // console.log('가격 정렬')
-      break;
-    case 'rating':
-      filterList = products.filter((product) => product.rating.rate).sort((a, b) => (a.rating.rate - b.rating.rate))
-      // console.log('평점 정렬')
-      break;
-    default:
-      // console.log('기본 정렬')
-      break;
-  }
+    setFilterProducts(filterList);
+  }, [searchFilter, sortList, products])
 
-  useEffect(() => { }, [searchFilter, sortList]);
 
   return (
     <div>
@@ -68,7 +65,9 @@ function ProductContainer({ products }) {
           value={searchFilter}
           onChange={(e) => setSearchFilter(e.target.value)}
         />
+        {searchFilter ? <button onClick={() => setSearchFilter('')}>X</button> : null}
       </form>
+
       <div className="btn-wrap">
         <button onClick={() => setSortList('default')}>기본 정렬</button>
         <button onClick={() => setSortList('price')}>가격 정렬</button>
@@ -76,7 +75,7 @@ function ProductContainer({ products }) {
       </div >
 
       <ul className="product-list">
-        {filterList.map(product => (
+        {filterProducts.map(product => (
           <ProductList key={product.id} product={product} deletebtn={deletBtn} />
         ))}
       </ul>
@@ -86,11 +85,28 @@ function ProductContainer({ products }) {
 
 function ProductApp() {
   const [productData, setProductData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
-      .then(response => response.json())
-      .then(data => setProductData(data))
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('출력 X');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setProductData(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setError(error);
+        setLoading(false);
+      });
   }, [])
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
