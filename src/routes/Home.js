@@ -4,8 +4,8 @@ function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <Link to="/Product">
-        <button>Product</button>
+      <Link to="/ProductApp">
+        <button>ProductApp</button>
       </Link>
     </div>
   );
