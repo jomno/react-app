@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
+import style from '../css/Product.module.css'
 
 function ProductList({ product, deletebtn }) {
   return (
     <>
-      <li className="item">
-        <div className="flex-wrap">
-          <span className="item-rating">평점: {product.rating.rate}</span>
-          <figure className="item-image">
+      <li className={style.itemWrap}>
+        <div className={style.flex}>
+          <span className={style.itemRating}>평점: {product.rating.rate}</span>
+          <figure className={style.itemImage}>
             <img src={product.image} alt={product.title} />
           </figure>
         </div>
-        <h3 className="item-title">{product.title}</h3>
-        <div className="item-description">{product.description}</div>
-        <div className="item-price">가격: ₩{(product.price * 1200).toLocaleString()}</div>
-        <div className="item-delete">
-          <button className="delete-button" onClick={deletebtn}>삭제</button>
+        <h3 className={style.item}>{product.title}</h3>
+        <div className={style.item}>{product.description}</div>
+        <div className={`${style.item} ${style.price}`}>가격: ₩{(product.price * 1200).toLocaleString()}</div>
+        <div className={style.btnWrap}>
+          <button className={style.btn} onClick={deletebtn}>삭제</button>
         </div>
       </li>
     </>
@@ -24,20 +25,24 @@ function ProductList({ product, deletebtn }) {
 function ProductContainer({ products }) {
 
   const [filterProducts, setFilterProducts] = useState(products);
-  const [searchFilter, setSearchFilter] = useState(''); // 검색 필터 기본 false
+  const [searchFilter, setSearchFilter] = useState('');
   const [sortList, setSortList] = useState('default');
 
-  const deletBtn = (e) => { // 카드 삭제 기능
+
+  const deletBtn = (e) => {
     e.preventDefault();
-    const btnParent = e.target.parentElement
-    btnParent.parentElement.remove();
+    const btnParent = e.target.closest('li')
+    let result = window.confirm(`정말 ${btnParent.querySelector('h3').textContent}을 삭제하시겠습니까?`);
+    if (result) {
+      alert('성공적으로 삭제하였습니다.')
+      btnParent.remove();
+    }
   }
 
   useEffect(() => {
-    let filterList = products; // 기본 리스트
+    let filterList = products;
 
-    if (searchFilter) { // input에 검색을 하면 
-      // 이름(title)으로 검색 기능 소문자로 변환, 공백 제거 비교
+    if (searchFilter) { 
       filterList = products.filter(product => product.title.replace(/\s/g, '').toLowerCase().includes(searchFilter.replace(/\s/g, '').toLowerCase()));
     }
 
@@ -57,22 +62,24 @@ function ProductContainer({ products }) {
 
 
   return (
-    <div>
-      <form>
-        <input
-          type="text"
-          placeholder="이름으로 검색"
-          value={searchFilter}
-          onChange={(e) => setSearchFilter(e.target.value)}
-        />
-        {searchFilter ? <button onClick={() => setSearchFilter('')}>X</button> : null}
-      </form>
+    <div className={style.container}>
+      <div className={style.flexWrap}>
+        <form>
+          <input
+            type="text"
+            placeholder="이름으로 검색"
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
+          />
+          {searchFilter ? <button onClick={() => setSearchFilter('')}>X</button> : null}
+        </form>
 
-      <div className="btn-wrap">
-        <button onClick={() => setSortList('default')}>기본 정렬</button>
-        <button onClick={() => setSortList('price')}>가격 정렬</button>
-        <button onClick={() => setSortList('rating')}> 평점 정렬</button >
-      </div >
+        <div className={style.btnWrap}>
+          <button onClick={() => setSortList('default')} className={style.btn}>기본 정렬</button>
+          <button onClick={() => setSortList('price')} className={style.btn}>가격 정렬</button>
+          <button onClick={() => setSortList('rating')} className={style.btn}> 평점 정렬</button >
+        </div >
+      </div>
 
       <ul className="product-list">
         {filterProducts.map(product => (
@@ -109,8 +116,8 @@ function ProductApp() {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
-      <h1>상품 목록</h1>
+    <div >
+      <h1 className={style.title}>상품 목록</h1>
       <ProductContainer products={productData} />
     </div>
   )

@@ -11,16 +11,3 @@ li {
   list-style: none;
 }
 
-.item-image {
-  width: 60px;
-  height: 60px;
-  border: 2px solid #ccc;
-  border-radius: 100%;
-}
-
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 100%;
-}
