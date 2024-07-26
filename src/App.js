@@ -5,7 +5,7 @@ import './css/App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path="/ProductApp" element={<ProductApp />} />
         <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
