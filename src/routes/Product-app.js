@@ -39,16 +39,20 @@ function ProductContainer({ products }) {
     }
   }
 
+  const getButtonStyle = (type) => {
+    return sortList === type ? { backgroundColor: '#87a86f', color: '#Fff' } : {};
+  };
+
   useEffect(() => {
     let filterList = products;
 
-    if (searchFilter) { 
+    if (searchFilter) {
       filterList = products.filter(product => product.title.replace(/\s/g, '').toLowerCase().includes(searchFilter.replace(/\s/g, '').toLowerCase()));
     }
 
     switch (sortList) {
       case 'price':
-        filterList = filterList.slice().sort((a, b) => (a.price - b.price))
+        filterList = filterList.slice().sort((a, b) => (a.price - b.price));
         break;
       case 'rating':
         filterList = filterList.slice().sort((a, b) => (a.rating.rate - b.rating.rate))
@@ -59,7 +63,6 @@ function ProductContainer({ products }) {
 
     setFilterProducts(filterList);
   }, [searchFilter, sortList, products])
-
 
   return (
     <div className={style.container}>
@@ -75,9 +78,9 @@ function ProductContainer({ products }) {
         </form>
 
         <div className={style.btnWrap}>
-          <button onClick={() => setSortList('default')} className={style.btn}>기본 정렬</button>
-          <button onClick={() => setSortList('price')} className={style.btn}>가격 정렬</button>
-          <button onClick={() => setSortList('rating')} className={style.btn}> 평점 정렬</button >
+          <button onClick={() => setSortList('default')} style={getButtonStyle('default')} className={style.btn}>기본 정렬</button>
+          <button onClick={() => setSortList('price')} style={getButtonStyle('price')} className={style.btn}>가격 정렬</button>
+          <button onClick={() => setSortList('rating')} style={getButtonStyle('rating')} className={style.btn}> 평점 정렬</button >
         </div >
       </div>
 

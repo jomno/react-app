@@ -7,6 +7,7 @@
 .title {
   padding: 2rem 0;
   text-align: center;
+  color: #164129;
   background: beige;
 }
 
@@ -44,7 +45,7 @@
 .itemImage {
   width: 60px;
   height: 60px;
-  border: 2px solid #ccc;
+  border: 2px solid #eee;
   border-radius: 100%;
 }
 
@@ -58,13 +59,11 @@
 .itemRating,
 .btn {
   padding: .2rem;
-  color: #fff;
   border: none;
   border-radius: 4px;
 }
 
 .btn {
-  /* background: #87a86f; */
   color: #000;
   cursor: pointer;
 }
@@ -74,6 +73,10 @@
 }
 
 .itemRating {
+  padding: .2rem .6rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
   background: #74aaff;
 }
 
