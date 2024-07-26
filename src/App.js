@@ -7,8 +7,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
         <Route path="/ProductApp" element={<ProductApp />} />
+        <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
       </Routes>
     </Router>
   );
