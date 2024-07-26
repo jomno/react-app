@@ -5,9 +5,9 @@ import './css/App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Routes>
-        <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
+        <Route path="/Home" element={<Home />} />
         <Route path="/ProductApp" element={<ProductApp />} />
       </Routes>
     </Router>
