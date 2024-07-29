@@ -36,12 +36,12 @@ function ProductContainer({ products }) {
     let result = window.confirm(`정말 ${btnParent.querySelector('h3').textContent}을 삭제하시겠습니까?`);
     if (result) {
       alert('성공적으로 삭제하였습니다.')
-      btnParent.remove();
+      btnParent.remove(); // 이 부분 변경해야 함.
     }
   }
 
   const getButtonStyle = (type) => {
-    return sortList === type ? { backgroundColor: '#87a86f', color: '#Fff' } : {};
+    return sortList === type ? { backgroundColor: '#87a86f', color: '#Fff' } : {}; // 이 부분 변경해야 함.
   };
 
   useEffect(() => {
@@ -98,6 +98,7 @@ function App() {
   const [productData, setProductData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
       .then(response => {
